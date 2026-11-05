@@ -110,4 +110,12 @@ app.get("/notes", function(req, res) {
 app.get("/", function (req, res) {
     res.sendFile("D:/100xSchool/Projects/week_09_Aunthentication/Note_app/Frontend/index.html");
 })
+
+app.get("/signup", function (req, res) {
+    res.sendFile("D:/100xSchool/Projects/week_09_Aunthentication/Note_app/Frontend/signup.html");
+})
+
+app.get("/signin", function (req, res) {
+    res.sendFile("D:/100xSchool/Projects/week_09_Aunthentication/Note_app/Frontend/signin.html");
+})
 app.listen(3000);
