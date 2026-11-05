@@ -26,14 +26,14 @@
                 
 
                 // show the note in the frontend
-                const noteNode = document.createElement("div");
-                noteNode.innerHTML = document.getElementById("userNote").value;
-                noteNode.setAttribute("style", "border: 2px solid black; padding: 10px; margin: 10px; border-radius: 5px;");
+                const newNode = document.createElement("div");
+                newNode.innerHTML = document.getElementById("userNote").value;
+                newNode.setAttribute("style", "border: 2px solid black; padding: 10px; margin: 10px; border-radius: 5px;");
                 document.getElementById("notes").appendChild(noteNode);
 
 
 
-
+                //make the input box empty again
                 document.getElementById("userNote").value = "";
             }
 
@@ -50,8 +50,8 @@
                 });
                 const notes = response.data.notes;
                 
-                console.log(response.data.notes);
                 document.getElementById("notes").innerHTML = "";
+                
                 for(let i=0; i<notes.length; i++) {
                     const noteNote = document.createElement("div");
                     noteNote.innerHTML = notes[i].note;

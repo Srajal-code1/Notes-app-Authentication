@@ -1,11 +1,15 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { authMiddleware } = require("./middleware");
+
 const app = express();
 app.use(express.json());
 
 const notes = [];  
-const users = [];
+const users = [{
+    username: "harkirat",
+    password: "123123"
+}];
 
 app.post("/signup", function(req, res) {
     const username = req.body.username;
@@ -29,10 +33,11 @@ app.post("/signup", function(req, res) {
 app.post("/signin", function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
+
     const userExists = users.find(user => user.username === username && user.password === password);
 
     if(!userExists) {
-        res.send(403).json({
+        res.status(403).json({
             msg: "Incorrect credentials"
         })
         return;
