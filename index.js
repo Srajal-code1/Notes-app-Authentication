@@ -37,17 +37,40 @@ app.post("/signin", function(req, res) {
         return;
     }
 
+    // json web tokens (JWT)
+    const token = jwt.sign({
+        username: username,
+    }, "srajal123");
+
+    res.json({
+        token: token
+    })
+
 })
 
-// json web tokens (JWT)
-const token = jwt.sign({
-    username: username,
-    password: password
-})
 
 
-// POST - Create a note
+// POST - Create a note -- AUTHENTICATED ENDPOINT
 app.post("/notes", function(req, res) {
+    //check if they ahve sent the right headers. extract who this user is from the header
+    const token = req.headers.token;
+
+    if(!token) {
+        res.status(403).send({
+            msg: "You are not logged in"
+        })
+        return;
+    }
+
+    const decoded = jwt.verify(token, "srajal123");
+    const username = decoded.username
+
+    if(!username) {
+        res.status(403).json({
+            msg: "malformed token"
+        })
+        return;
+    }
 
     const note = req.body.note;
     notes.push(note);
@@ -56,7 +79,9 @@ app.post("/notes", function(req, res) {
     })
 })
 
+// GET - get all my notes -- AUTHENTICATED ENDPOINT
 app.get("/notes", function(req, res) {
+    
     res.json({
         notes
     })
