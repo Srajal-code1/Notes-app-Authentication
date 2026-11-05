@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 app.use(express.json());
 
-const notes = [];
+const notes = [];  
 const users = [];
 
 app.post("/signup", function(req, res) {
@@ -16,7 +16,7 @@ app.post("/signup", function(req, res) {
         })
     }
     users.push({
-        username: username, 
+        username: username,     
         password: password
     })
     res.json({
@@ -73,7 +73,7 @@ app.post("/notes", function(req, res) {
     }
 
     const note = req.body.note;
-    notes.push(note);
+    notes.push({note, username});
     res.json({
         msg: "Done!"
     })
@@ -81,9 +81,29 @@ app.post("/notes", function(req, res) {
 
 // GET - get all my notes -- AUTHENTICATED ENDPOINT
 app.get("/notes", function(req, res) {
+    const token = req.headers.token;
+
+    if(!token) {
+        res.status(403).send({
+            msg: "You are not logged in"
+        })
+        return;
+    }
+
+    const decoded = jwt.verify(token, "srajal123");
+    const username = decoded.username
+
+    if(!username) {
+        res.status(403).json({
+            msg: "malformed token"
+        })
+        return;
+    }
     
+    const userNotes = notes.filter(note => note.username === username);
+
     res.json({
-        notes
+        notes: userNotes
     })
 })
 
